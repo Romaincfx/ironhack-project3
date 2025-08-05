@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expensy-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: expensy-backend
+  template:
+    metadata:
+      labels:
+        app: expensy-backend
+    spec:
+      containers:
+      - name: expensy-backend
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_backend:latest
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expensy-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: expensy-frontend
+  template:
+    metadata:
+      labels:
+        app: expensy-frontend
+    spec:
+      containers:
+      - name: expensy-frontend
+        image: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_frontend:latest
+        ports:
+        - containerPort: 80
