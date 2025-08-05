@@ -6,8 +6,9 @@ on:
       - main  # Trigger workflow on push to main
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+    environment: production
 
     steps:
     - name: Checkout the repository
