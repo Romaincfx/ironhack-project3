@@ -51,7 +51,7 @@ jobs:
 
     # Configure kubectl to access EKS cluster
     - name: Set up kubectl
-      uses: aws-actions/eks-kubeconfig-action@v1
+      uses: aws-actions/eks-kubeconfig-action@v2
       with:
         cluster-name: ${{ secrets.EKS_CLUSTER_NAME }}
 
