@@ -32,21 +32,23 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and Push backend Image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./expensy_backend
-        file: ./expensy_backend/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_backend:latest
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/expensy_backend:latest ./expensy_backend
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/expensy_backend:latest
 
     - name: Build and Push frontend Image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./expensy_frontend
-        file: ./expensy_frontend/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_frontend:latest
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/expensy_frontend:latest ./expensy_frontend
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/expensy_frontend:latest
 
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
     # Set up AWS CLI for EKS deployment
     - name: Set up AWS CLI
