@@ -14,9 +14,19 @@ spec:
     spec:
       containers:
       - name: expensy-backend
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_backend:latest
+        image: romainconfavreux/expensy_backend:latest
         ports:
         - containerPort: 8080
+        env:
+            - name: DATABASE_URI
+              value: "mongodb://root:example@mongo:27017"
+            - name: REDIS_HOST
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: "someredispassword"
+
 
 ---
 
@@ -36,6 +46,6 @@ spec:
     spec:
       containers:
       - name: expensy-frontend
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/expensy_frontend:latest
+        image: romainconfavreux/expensy_frontend:latest
         ports:
-        - containerPort: 80
+        - containerPort: 3000
