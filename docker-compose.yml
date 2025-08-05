@@ -1,0 +1,21 @@
+services:
+  expensy_backend:
+    build: ./expensy_backend
+    image: romainconfavreux/expensy_backend:latest
+    container_name: expensy_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+    # Add volumes or depends_on as needed
+
+  expensy_frontend:
+    build: ./expensy_frontend
+    image: romainconfavreux/expensy_frontend:latest
+    container_name: expensy_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - expensy_backend
