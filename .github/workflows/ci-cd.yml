@@ -64,6 +64,26 @@ jobs:
     - name: Update Kubeconfig
       run: eksctl utils write-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region eu-west-3
 
+    - name: Install Helm
+      run: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+    - name: Add prometheus-community repo
+      run: |
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo update
+
+    - name: Deploy Prometheus and Grafana
+      run: |
+        helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+          --namespace monitoring --create-namespace \
+          --set grafana.adminPassword='grafana' \
+          --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+
+    - name: Expose Grafana with LoadBalancer
+      run: |
+        kubectl patch svc monitoring-grafana -n monitoring \
+          -p '{"spec": {"type": "LoadBalancer"}}'
+
 
     # Deploy to EKS
     - name: Deploy to EKS
